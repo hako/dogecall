@@ -1,0 +1,1 @@
+web: dogecall-server -s
