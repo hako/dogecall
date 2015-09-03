@@ -34,7 +34,7 @@ func main() {
 		fmt.Println(usage)
 		os.Exit(1)
 	}
-	args, _ := docopt.Parse(usage, nil, true, VERSION, false)
+	args, _ := docopt.Parse(usage, nil, true, version, false)
 
 	if os.Getenv("GO_ENV") != "production" {
 
@@ -51,7 +51,7 @@ func main() {
 			os.Exit(1)
 		} else {
 			port := os.Getenv("PORT")
-			ServeTwiML(port)
+			serveTwiML(port)
 		}
 	}
 }
