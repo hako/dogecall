@@ -20,7 +20,7 @@ import (
 	"github.com/hako/dogecall/Godeps/_workspace/src/github.com/docopt/docopt-go"
 )
 
-var usage string = `dogecall - ENCOUNTER A DOGE THROUGH A PHONE CALL.
+var usage = `dogecall - ENCOUNTER A DOGE THROUGH A PHONE CALL.
 
 Usage:
  dogecall [-n <number>]
@@ -33,22 +33,22 @@ Options:
 
 Example: dogecall -n [PHONE NUMBER]`
 
-type DogeCallRC struct {
+type dogecallrc struct {
 	Accountsid  string `json:"account_sid"`
 	TwAuthtoken string `json:"tw_authtoken"`
 	TwNumber    string `json:"tw_number"`
 	URL         string `json:"url"`
 }
 
-var VERSION = "0.5"
-var TWILIO_API_BASE = "https://api.twilio.com/2010-04-01"
+var version = "0.5"
+var twilioAPIBaseURL = "https://api.twilio.com/2010-04-01"
 
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println(usage)
 		os.Exit(1)
 	}
-	args, _ := docopt.Parse(usage, nil, true, VERSION, false)
+	args, _ := docopt.Parse(usage, nil, true, version, false)
 
 	// Load .dogecallrc
 	dcConfig, err := loadDogeCallRC()
@@ -63,43 +63,42 @@ func main() {
 		twilioNumber := dcConfig.TwNumber
 
 		// Check both phone numbers before calling.
-		check1 := CheckNumber(phoneNumber)
+		check1 := checkNumber(phoneNumber)
 		if check1 != true {
 			fmt.Printf("wow, such number \"%s\" not valid, lol.", phoneNumber)
 			os.Exit(1)
 		}
 
-		check2 := CheckNumber(twilioNumber)
+		check2 := checkNumber(twilioNumber)
 		if check2 != true {
 			fmt.Printf("wow, such number in config \"%s\" is not valid, lol.", twilioNumber)
 			os.Exit(1)
 		}
-		Call(twilioNumber, phoneNumber)
+		call(twilioNumber, phoneNumber)
 	}
 }
 
 //	Checks the phone number.
-func CheckNumber(phoneNumber string) bool {
+func checkNumber(phoneNumber string) bool {
 	phoneRegex := `[(]?\d{3}[)]?\s?-?\s?\d{3}\s?-?\s?\d{4}`
 	result, _ := regexp.MatchString(phoneRegex, phoneNumber)
 	return result
 }
 
 //	Load .dogecallrc.
-func loadDogeCallRC() (DogeCallRC, error) {
-	var data DogeCallRC
+func loadDogeCallRC() (dogecallrc, error) {
+	var data dogecallrc
 
 	usr, _ := user.Current()
 	rc, err := ioutil.ReadFile(usr.HomeDir + "/" + ".dogecallrc")
 	if err != nil {
 		fmt.Println("creating dogecallrc...")
 		createDogeCallRC(usr.HomeDir)
-		return data, errors.New("please configure .dogecallrc 2 use dogecall pls.")
-	} else {
-		err := json.Unmarshal(rc, &data)
-		if err != nil {
-			return data, errors.New("Error decoding from JSON.")
-		}
+		return data, errors.New("please configure .dogecallrc 2 use dogecall pls")
+	}
+
+	if err := json.Unmarshal(rc, &data); err != nil {
+		return data, errors.New("Error decoding from JSON")
 	}
 
 	return data, nil
@@ -107,7 +106,7 @@ func loadDogeCallRC() (DogeCallRC, error) {
 
 // Create .dogecallrc if it does not exist already.
 func createDogeCallRC(dir string) {
-	var data DogeCallRC
+	var data dogecallrc
 
 	data.Accountsid = ""
 	data.TwNumber = ""
@@ -119,13 +118,13 @@ func createDogeCallRC(dir string) {
 }
 
 // Make a call to the person.
-func Call(twilioNumber string, recievingNumber string) {
+func call(twilioNumber string, recievingNumber string) {
 	dcConfig, _ := loadDogeCallRC()
 
 	accountSid := dcConfig.Accountsid
 	authToken := dcConfig.TwAuthtoken
 	callURL := dcConfig.URL
-	TWILIO_CALL_URL := TWILIO_API_BASE + "/Accounts/" + accountSid + "/Calls.json"
+	twilioCallURL := twilioAPIBaseURL + "/Accounts/" + accountSid + "/Calls.json"
 
 	// Prepare POST values.
 	// Remember, the 'To' number must be a 'verified number' when using a twilio trial account.
@@ -141,7 +140,7 @@ func Call(twilioNumber string, recievingNumber string) {
 
 	// Create a HTTP client, prepare and send the request.
 	client := &http.Client{}
-	req, _ := http.NewRequest("POST", TWILIO_CALL_URL, &data)
+	req, _ := http.NewRequest("POST", twilioCallURL, &data)
 	req.SetBasicAuth(accountSid, authToken)
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 	res, _ := client.Do(req)

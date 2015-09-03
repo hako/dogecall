@@ -13,7 +13,7 @@ func TestCheckPhoneNumber(t *testing.T) {
 	}
 
 	for _, number := range numbers {
-		check := CheckNumber(number)
+		check := checkNumber(number)
 		if check != true {
 			t.Errorf("CheckNumber(%s) == %s, want %s", number, check, nil)
 		}

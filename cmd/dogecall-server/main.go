@@ -16,7 +16,7 @@ import (
 	"github.com/hako/dogecall/Godeps/_workspace/src/github.com/joho/godotenv"
 )
 
-var usage string = `dogecall-server - SERVER FOR DOGECALL.
+var usage = `dogecall-server - SERVER FOR DOGECALL.
 
 Usage:
  dogecall [-s]
@@ -27,7 +27,7 @@ Options:
   -h, --help          show this help message and exit.
   -v, --version       the versions lol.
 `
-var VERSION = "0.5"
+var version = "0.5"
 
 func main() {
 	if len(os.Args) < 2 {
@@ -57,7 +57,7 @@ func main() {
 }
 
 //	Serves TwiML on the server.
-func ServeTwiML(port string) {
+func serveTwiML(port string) {
 	//	Response TwiML page based on the digits on the phone.
 	ResponseHandler := func(rw http.ResponseWriter, req *http.Request) {
 		var twiml string
