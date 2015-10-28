@@ -1,3 +1,15 @@
+```
+                   
+                                                                                           
+                            .N.                                           lW. .W:      
+                            :M.                                           oM. .M:      
+                       ,kxxkKN  .xOO0l   :kOOOo  'kkxkk.  .kOxkd  ;kkxOx  dW  .M;      
+                      ,N.   kK .Wo  .Wc 0O.  cW.'N,'lkk. .Nc     oX.  dK  dN  .M;      
+                      cX    xK ;M,   Nc.Mc  .KK lWxc.  . lX      Ok   l0  kX  'M,      
+                       dKxxOKN  oKxxKo  ;0OOx0k  d0xdxkx  k0dokx 'KkldOW; k0  ,M.      
+                          .       ..        .Nl     .       ..     ..                  
+                                        dxxx0d                                                                                                                 
+```
 ###dogecall
 
 `dogecall` is a port of my python program `dogecall.py` which was used for [this silly video](https://www.youtube.com/watch?v=9S3BX62vToo) I made a year ago. Remaking [this post I stumbled upon](http://hakob.yt/doge).
