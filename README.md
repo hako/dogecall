@@ -12,13 +12,21 @@
 ```
 ###dogecall
 
-`dogecall` is a port of my python program `dogecall.py` which was used for [this silly video](https://www.youtube.com/watch?v=9S3BX62vToo) I made a year ago. Remaking [this post I stumbled upon](http://hakob.yt/doge).
+`dogecall` is a port of my python program `dogecall.py` which was used for [this silly video](https://www.youtube.com/watch?v=9S3BX62vToo) I made a year ago. It was made as a joke remaking [this post I stumbled upon](http://hakob.yt/doge). It was fun doing it.
 
+Installation
+-----
 dogecall comes as two programs:
 
 `dogecall` - run on PC.
 
 `dogecall-server` - run on a server.
+
+To install (If you have Go installed)
+
+`go get github.com/hako/dogecall`
+
+`go get github.com/hako/dogecall/cmd/dogecall-server`
 
 Usage
 -----
