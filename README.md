@@ -86,3 +86,7 @@ dogecall-server default environment variables:
 `PORT`   - Whatever you like (ie, 8080)
 
 `GO_ENV` - `production` (set only on a production server)
+
+License
+-----
+MIT
