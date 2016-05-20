@@ -7,6 +7,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -16,13 +17,30 @@ import (
 	"github.com/hako/dogecall/Godeps/_workspace/src/github.com/joho/godotenv"
 )
 
+var logo = `
+
+                                                                        
+             .N.                                           lW. .W:      
+             :M.                                           oM. .M:      
+        ,kxxkKN  .xOO0l   :kOOOo  'kkxkk.  .kOxkd  ;kkxOx  dW  .M;      
+       ,N.   kK .Wo  .Wc 0O.  cW.'N,'lkk. .Nc     oX.  dK  dN  .M;      
+       cX    xK ;M,   Nc.Mc  .KK lWxc.  . lX      Ok   l0  kX  'M,      
+        dKxxOKN  oKxxKo  ;0OOx0k  d0xdxkx  k0dokx 'KkldOW; k0  ,M.      
+           .       ..        .Nl     .       ..     ..                  
+                         dxxx0d                                         
+                                                                        
+
+                      S   E   R   V   E   R
+`
+
 var usage = `dogecall-server - SERVER FOR DOGECALL.
 
 Usage:
- dogecall [-s]
+ dogecall [-s] [-p <port>]
  dogecall [-h | --help] [-v | --version]
 
 Options:
+  -p                  port.
   -s                  wow lanch server 2 serve u.
   -h, --help          show this help message and exit.
   -v, --version       the versions lol.
@@ -37,30 +55,37 @@ func main() {
 	args, _ := docopt.Parse(usage, nil, true, version, false)
 
 	if os.Getenv("GO_ENV") != "production" {
-
 		err := godotenv.Load()
 		if err != nil {
-			fmt.Println("stap, no .env file. wont start.")
-			os.Exit(1)
+			fmt.Println("warning: no .env file. continuing in development environment...")
 		}
 	}
 
-	if args["-s"] != false {
-		if os.Getenv("PORT") == "" {
-			fmt.Println("stap, doge port not set in env.")
-			os.Exit(1)
+	if args["-s"] != false || args["-p"] != false {
+		var port string
+
+		if args["<port>"] != nil {
+			port = args["<port>"].(string)
+		} else if os.Getenv("PORT") != "" {
+			port = os.Getenv("PORT")
 		} else {
-			port := os.Getenv("PORT")
-			serveTwiML(port)
+			fmt.Println("stap, doge port not set in env or argument.")
+			os.Exit(1)
 		}
+
+		serveTwiML(port)
 	}
 }
 
 //	Serves TwiML on the server.
 func serveTwiML(port string) {
+	logger := log.New(os.Stdout, "", log.Ldate)
+
 	//	Response TwiML page based on the digits on the phone.
 	ResponseHandler := func(rw http.ResponseWriter, req *http.Request) {
 		var twiml string
+
+		logger.Println(req.Method, req.Host, req.RequestURI)
 
 		digit := req.FormValue("Digits")
 
@@ -106,6 +131,7 @@ func serveTwiML(port string) {
 	//	DogeMenuHandler TwiML page.
 	DogeMenuHandler := func(rw http.ResponseWriter, req *http.Request) {
 		var twiml string
+		logger.Println(req.Method, req.Host, req.RequestURI)
 		twiml = `
 		<Response>
 		    <Gather action="/response"  method="GET" numDigits="1">
@@ -120,8 +146,9 @@ func serveTwiML(port string) {
 
 	//	Index page for dogecall TwiML. Nothing fancy yet.
 	Index := func(rw http.ResponseWriter, req *http.Request) {
+		logger.Println(req.Method, req.Host, req.RequestURI)
 		t := time.Now()
-		randomDoge := []string{"wow many servers", "such server", "http lol", "wow", "the http", "dogecall"}
+		randomDoge := []string{"many calls lol", "doge lol", "very gopher", "many requests", "just wow", "wow many servers", "such rand", "such server", "http lol", "wow", "the http", "dogecall"}
 		rand.Seed(t.UnixNano())
 		rnd := randomDoge[rand.Intn(len(randomDoge))]
 		rw.Write([]byte(rnd))
@@ -133,7 +160,8 @@ func serveTwiML(port string) {
 	http.HandleFunc("/response", ResponseHandler)
 
 	//	Listen and serve.
-	fmt.Printf("serving on http://localhost:%s\n", port)
+	fmt.Println(logo)
+	fmt.Printf("serving on http://localhost:%s lol.\n", port)
 
 	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {

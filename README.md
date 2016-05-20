@@ -1,12 +1,32 @@
+```
+                   
+                                                                                           
+                            .N.                                           lW. .W:      
+                            :M.                                           oM. .M:      
+                       ,kxxkKN  .xOO0l   :kOOOo  'kkxkk.  .kOxkd  ;kkxOx  dW  .M;      
+                      ,N.   kK .Wo  .Wc 0O.  cW.'N,'lkk. .Nc     oX.  dK  dN  .M;      
+                      cX    xK ;M,   Nc.Mc  .KK lWxc.  . lX      Ok   l0  kX  'M,      
+                       dKxxOKN  oKxxKo  ;0OOx0k  d0xdxkx  k0dokx 'KkldOW; k0  ,M.      
+                          .       ..        .Nl     .       ..     ..                  
+                                        dxxx0d                                                                                                                 
+```
 ###dogecall
 
-`dogecall` is a port of my python program `dogecall.py` which was used for [this silly video](https://www.youtube.com/watch?v=9S3BX62vToo) I made a year ago. Remaking [this post I stumbled upon](http://hakob.yt/doge).
+`dogecall` is a port of my python program `dogecall.py` which was used for [this silly video](https://www.youtube.com/watch?v=9S3BX62vToo) I made a year ago. It was made as a joke remaking [this post I stumbled upon](http://hakob.yt/doge). It was fun doing it.
 
+Installation
+-----
 dogecall comes as two programs:
 
 `dogecall` - run on PC.
 
 `dogecall-server` - run on a server.
+
+To install (If you have Go installed)
+
+`go get github.com/hako/dogecall`
+
+`go get github.com/hako/dogecall/cmd/dogecall-server`
 
 Usage
 -----
@@ -66,3 +86,7 @@ dogecall-server default environment variables:
 `PORT`   - Whatever you like (ie, 8080)
 
 `GO_ENV` - `production` (set only on a production server)
+
+License
+-----
+MIT
