@@ -93,7 +93,10 @@ func loadDogeCallRC() (dogecallrc, error) {
 	rc, err := ioutil.ReadFile(usr.HomeDir + "/" + ".dogecallrc")
 	if err != nil {
 		fmt.Println("creating dogecallrc...")
-		createDogeCallRC(usr.HomeDir)
+		err = createDogeCallRC(usr.HomeDir)
+		if err != nil {
+			return data, err
+		}
 		return data, errors.New("please configure .dogecallrc 2 use dogecall pls")
 	}
 
@@ -105,7 +108,7 @@ func loadDogeCallRC() (dogecallrc, error) {
 }
 
 // Create .dogecallrc if it does not exist already.
-func createDogeCallRC(dir string) {
+func createDogeCallRC(dir string) error {
 	var data dogecallrc
 
 	data.Accountsid = ""
@@ -113,8 +116,12 @@ func createDogeCallRC(dir string) {
 	data.URL = "http://dc.hakobaito.co.uk/doge" // Default URL, feel free to change.
 	data.TwAuthtoken = ""
 
-	rcdata, _ := json.MarshalIndent(data, "", "  ")
+	rcdata, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		return err
+	}
 	ioutil.WriteFile(dir+"/"+".dogecallrc", rcdata, 0644)
+	return nil
 }
 
 // Make a call to the person.
